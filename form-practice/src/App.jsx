@@ -1,9 +1,16 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import {Routes, Route, Link} from 'react-router-dom'
 import Form from './component/Form';
 
 function App() {
+
+  const [currentOrder, setCurrentOrder] = useState({})
+
+  const orderSubmit = (order) => {
+    console.log(`Your order is: `, order)
+  }
+
   return (
     <>
       <header>
@@ -20,7 +27,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<h2>This is the home page</h2>} />
 
-          <Route exact path="/orderForm/:product" element={<Form />} />
+          <Route exact path="/orderForm/:product" element={<Form orderSubmit={orderSubmit} />} />
 
           <Route exact path="/contact" />
         </Routes>

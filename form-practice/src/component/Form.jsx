@@ -1,14 +1,18 @@
-import React, {useState} from "react"
+import React, {useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
+const initialForm = {
+    name: "",
+    email: "",
+    count: "",
+    deliveryCharge: false
+}
+
 const Form = (props) => {
+
+    const {orderSubmit} = props
     
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        count: "",
-        deliveryCharge: false
-    })
+    const [form, setForm] = useState(initialForm)
 
     const {product} = useParams()
 
@@ -25,12 +29,24 @@ const Form = (props) => {
         setForm({...form, [e.target.name]: determineIfDeliveryChecked})
     }
 
+    const submitBtn = (e) => {
+        e.preventDefault()
+        console.log("submit")
+        orderSubmit(form)
+        setForm(initialForm)
+    }
+
+    useEffect(() => {
+      console.log(form)
+    }, [form])
+    
+
     return (
         <>
             <section className="Form">
                 <h2>Product {product} Order Form</h2>
                 <p>The price for {product} is {prices[product]}</p>
-                <form>
+                <form onSubmit={submitBtn}>
                     <label>Your Name:
                         <input name="name" type="text" value={form.name} onChange={changer}></input>
                     </label>
@@ -49,8 +65,8 @@ const Form = (props) => {
                     <label>Standard or Express Delivery (Standard is free; $2.99 for Express):
                         <input name="deliveryCharge" type="checkbox" checked={form.delivery} onChange={changer}></input>
                     </label>
+                    <button type="submit">Submit Order</button>
                 </form>
-                <button type="submit">Submit Order</button>
             </section>
         </>
     )
