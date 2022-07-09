@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<h2>This is the home page</h2>} />
 
-          <Route exact path="/orderForm/:model" element={<Form />} />
+          <Route exact path="/orderForm/:product" element={<Form />} />
 
           <Route exact path="/contact" />
         </Routes>
