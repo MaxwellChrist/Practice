@@ -83,9 +83,13 @@ const Form = (props) => {
                     <label>Your Name:
                         <input name="name" type="text" value={form.name} onChange={changer}></input>
                     </label>
+                    <p name="name">{errors.name}</p>
+                    
                     <label>Your Email address:
                         <input name="email" type="email" value={form.email} onChange={changer}></input>
                     </label>
+                    <p name="email">{errors.email}</p>
+
                     <label>How Many:
                         <select name="count" onChange={changer}>
                             <option value="0">Please Select an amount</option>
@@ -96,15 +100,15 @@ const Form = (props) => {
                             <option value="5">5</option>
                         </select>
                     </label>
+                    <p name="count">{errors.count}</p>
+
                     <label>Standard or Express Delivery (Standard is free; $2.99 for Express):
                         <input name="deliveryCharge" type="checkbox" checked={form.delivery} onChange={changer}></input>
                     </label>
+                    <p name="deliveryCharge">{errors.deliveryCharge}</p>
+                    
                     <button type="submit" disabled={disabled}>Submit Order</button>
                 </form>
-                <p>{errors.name}</p>
-                <p>{errors.email}</p>
-                <p>{errors.count}</p>
-                <p>{errors.deliveryCharge}</p>
             </section>
         </>
     )

@@ -20,10 +20,10 @@ function App() {
       </header>
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/orderForm/A">Product A</Link>
-        <Link to="/orderForm/B">Product B</Link>
-        <Link to="/orderForm/C">Product C</Link>
-        <Link to="/orderForm/D">Product D</Link>
+        <Link name="productA" to="/orderForm/A">Product A</Link>
+        <Link name="productB" to="/orderForm/B">Product B</Link>
+        <Link name="productC" to="/orderForm/C">Product C</Link>
+        <Link name="productD" to="/orderForm/D">Product D</Link>
       </nav>
       <main>
         <Routes>
