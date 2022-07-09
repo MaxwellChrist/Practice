@@ -1,5 +1,6 @@
 import React, {useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import * as yup from 'yup'
 
 const initialForm = {
     name: "",
@@ -12,8 +13,22 @@ const Form = (props) => {
     const {orderSubmit} = props
 
     const navigate = useNavigate()
+
+    const yupFormSchema = yup.object().shape({
+        name: yup.string().min(3, "Name must be at least 3 characters long"),
+        email: yup.string().email("Improper email entered; please enter valid email address").required("Email is required"),
+        count: yup.string().oneOf(["1", "2", "3", "4", "5"], "Please select an amount"),
+        deliveryCharge: yup.boolean()
+    })
     
     const [form, setForm] = useState(initialForm)
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        count: "",
+        deliveryCharge: ""
+    })
+    const [disabled, setDisabled] = useState(true)
 
     const {product} = useParams()
 
@@ -24,8 +39,19 @@ const Form = (props) => {
         "D": "$1",
     }
 
+    const validateChange = (e) => {
+        yup.reach(yupFormSchema, e.target.name).validate(e.target.type === "checkbox" ? e.target.checked : e.target.value)
+            .then((res) => {
+                setErrors({...errors, [e.target.name]: ""})
+            })
+            .catch((err) => {
+                setErrors({...errors, [e.target.name]: err.errors[0]})
+            })
+
+    }
+
     const changer = (e) => {
-        console.log(`name is : ${e.target.name}, value is ${e.target.value}, type is ${e.target.type}, check is ${e.target.checked}`)
+        validateChange(e)
         const determineIfDeliveryChecked = e.target.type === 'checkbox' ? e.target.checked : e.target.value
         setForm({...form, [e.target.name]: determineIfDeliveryChecked})
     }
@@ -39,9 +65,14 @@ const Form = (props) => {
     }
 
     useEffect(() => {
-      console.log(form)
-    }, [form])
-    
+      yupFormSchema.isValid(form)
+        .then((res) => {
+            setDisabled(!res)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }, [form, yupFormSchema])
 
     return (
         <>
@@ -57,7 +88,8 @@ const Form = (props) => {
                     </label>
                     <label>How Many:
                         <select name="count" onChange={changer}>
-                            <option value={form.count}>1</option>
+                            <option value="0">Please Select an amount</option>
+                            <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
@@ -67,8 +99,12 @@ const Form = (props) => {
                     <label>Standard or Express Delivery (Standard is free; $2.99 for Express):
                         <input name="deliveryCharge" type="checkbox" checked={form.delivery} onChange={changer}></input>
                     </label>
-                    <button type="submit">Submit Order</button>
+                    <button type="submit" disabled={disabled}>Submit Order</button>
                 </form>
+                <p>{errors.name}</p>
+                <p>{errors.email}</p>
+                <p>{errors.count}</p>
+                <p>{errors.deliveryCharge}</p>
             </section>
         </>
     )
