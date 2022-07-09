@@ -1,5 +1,5 @@
-import React, {useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import React, {useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 const initialForm = {
     name: "",
@@ -9,8 +9,9 @@ const initialForm = {
 }
 
 const Form = (props) => {
-
     const {orderSubmit} = props
+
+    const navigate = useNavigate()
     
     const [form, setForm] = useState(initialForm)
 
@@ -34,6 +35,7 @@ const Form = (props) => {
         console.log("submit")
         orderSubmit(form)
         setForm(initialForm)
+        navigate("/order")
     }
 
     useEffect(() => {
