@@ -1,6 +1,7 @@
 import React, {useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import * as yup from 'yup'
+import * as yup from 'yup';
+import axios from 'axios';
 
 const initialForm = {
     name: "",
@@ -10,7 +11,7 @@ const initialForm = {
 }
 
 const Form = (props) => {
-    const {orderSubmit} = props
+    const {orderSubmit, jokes} = props
 
     const navigate = useNavigate()
 
@@ -33,10 +34,10 @@ const Form = (props) => {
     const {product} = useParams()
 
     const prices = {
-        "A": "$1.99",
-        "B": "$5.99",
-        "C": "$9.99",
-        "D": "$1",
+        "1": "$1.99",
+        "2": "$5.99",
+        "3": "$9.99",
+        "4": "$1",
     }
 
     const validateChange = (e) => {
@@ -58,7 +59,6 @@ const Form = (props) => {
 
     const submitBtn = (e) => {
         e.preventDefault()
-        console.log("submit")
         orderSubmit(form)
         setForm(initialForm)
         navigate("/order")
@@ -74,11 +74,14 @@ const Form = (props) => {
         })
     }, [form, yupFormSchema])
 
+
     return (
         <>
             <section className="Form">
-                <h2>Product {product} Order Form</h2>
-                <p>The price for {product} is {prices[product]}</p>
+                <h1>This is the following joke you could buy for {prices[product]}:</h1>
+                <h2>{jokes[product - 1]}</h2>
+
+                <h2>If you like this joke and care to buy it, fill out the form below:</h2>
                 <form onSubmit={submitBtn}>
                     <label>Your Name:
                         <input name="name" type="text" value={form.name} onChange={changer}></input>
@@ -90,7 +93,7 @@ const Form = (props) => {
                     </label>
                     <p name="email">{errors.email}</p>
 
-                    <label>How Many:
+                    <label>How many starts do you give this joke:
                         <select name="count" onChange={changer}>
                             <option value="0">Please Select an amount</option>
                             <option value="1">1</option>
